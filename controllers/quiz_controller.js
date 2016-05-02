@@ -26,6 +26,17 @@ exports.index = function(req, res, next) {
 		});
 };
 
+exports.search = function(req, res, next) {
+	models.Quiz.findAll({where: ["question like ?", '%'+req.query.search.split(" ").join("%")+'%']})
+		.then(function(quizzes) {
+			res.render('quizzes/index.ejs', { quizzes: quizzes});
+		})
+		.catch(function(error) {
+			next(error);
+		});
+};
+
+
 exports.check = function(req, res) {
 	models.Quiz.findById(req.params.quizId)
 		.then(function(quiz) {

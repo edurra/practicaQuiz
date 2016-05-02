@@ -16,5 +16,7 @@ router.get('/check', quizController.check);
 router.get('/quizzes',                     	quizController.index);
 router.get('/quizzes/:quizId(\\d+)',       	quizController.show);
 router.get('/quizzes/:quizId(\\d+)/check', 	quizController.check);
+router.get('/search', quizController.search);
+
 
 module.exports = router;
