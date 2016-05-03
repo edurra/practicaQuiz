@@ -26,6 +26,23 @@ exports.index = function(req, res, next) {
 		});
 };
 
+exports.new = function(req, res, next) {
+	var quiz = models.Quiz.build({question: "", answer: ""});
+	res.render('quizzes/new', {quiz: quiz});
+};
+
+exports.create = function(req, res, next){
+	var quiz = models.Quiz.build({ question : req.body.quiz.question,
+	                               answer : req.body.quiz.answer});
+	quiz.save({fields: ["question", "answer"]})
+	   .then(function(quiz) {
+	   	res.redirect('/quizzes');
+	   })
+	   .catch(function(error) {
+	   	next(error);
+	   });
+};
+
 exports.search = function(req, res, next) {
 	models.Quiz.findAll({where: ["question like ?", '%'+req.query.search.split(" ").join("%")+'%']})
 		.then(function(quizzes) {
@@ -36,39 +53,34 @@ exports.search = function(req, res, next) {
 		});
 };
 
+exports.load = function(req, res, next, quizId) {
+	models.Quiz.findById(quizId)
+  		.then(function(quiz) {
+      		if (quiz) {
+        		req.quiz = quiz;
+        		next();
+      		} else { 
+      			throw new Error('No existe quizId=' + quizId);
+      		}
+        })
+        .catch(function(error) { next(error); });
+};
 
 exports.check = function(req, res) {
-	models.Quiz.findById(req.params.quizId)
-		.then(function(quiz) {
-			if (quiz) {
-				var answer = req.query.answer || "";
+	var answer = req.query.answer || "";
 
-				var result = answer === quiz.answer ? 'Correcta' : 'Incorrecta';
+	var result = answer === req.quiz.answer ? 'Correcta' : 'Incorrecta';
 
-				res.render('quizzes/result', { quiz: quiz, 
-											   result: result, 
-											   answer: answer });
-			} else {
-				throw new Error('No existe ese quiz en la BBDD.');
-			}
-		})
-		.catch(function(error) {
-			next(error);
-		});	
+	res.render('quizzes/result', { quiz: req.quiz, 
+								   result: result, 
+								   answer: answer });
 };
 
 
 exports.show = function(req, res, next){
-	models.Quiz.findById(req.params.quizId)
-	.then(function(quiz) {
-		if(quiz) {
-			var answer = req.query.answer || "";
-			var result = answer === quiz.answer ? 'Correcta' : 'Incorrecta';
-		    res.render('quizzes/show',{quiz : quiz, answer: answer});
-		}
-		else {
-			throw new Error('No existe ese quiz en la BBDD');
-		}
-	}).catch(function(error) {next(error);});
+	var answer = req.query.answer || '';
+
+	res.render('quizzes/show', {quiz: req.quiz,
+								answer: answer});
 	
 };
