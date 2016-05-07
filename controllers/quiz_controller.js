@@ -17,13 +17,21 @@ exports.question = function(req, res, next){
 };
 
 exports.index = function(req, res, next) {
+	
+	
 	models.Quiz.findAll()
 		.then(function(quizzes) {
+			if(req.params.format=='json'){
+                res.render('quizzes/index_json.ejs', { quizzes: quizzes, layout: false} );
+			}
+			else {
 			res.render('quizzes/index.ejs', { quizzes: quizzes});
+		     };
 		})
 		.catch(function(error) {
 			next(error);
 		});
+	
 };
 
 exports.new = function(req, res, next) {
@@ -79,8 +87,11 @@ exports.check = function(req, res) {
 
 exports.show = function(req, res, next){
 	var answer = req.query.answer || '';
-
+    if(req.params.format=='json'){
+       res.render('quizzes/show_json.ejs', { quiz: req.quiz, layout: false} );
+    }
+    else {
 	res.render('quizzes/show', {quiz: req.quiz,
 								answer: answer});
-	
+	};
 };
