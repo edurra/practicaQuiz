@@ -1,0 +1,11 @@
+<table>
+  <% for (var i in quizzes) { %>        
+     <tr>
+        <td>
+           { "id" : <%= quizzes[i].id %> , </td>
+            <td>"question" :<%= quizzes[i].question %>, </td>
+           <td>  "answer" : <%= quizzes[i].answer %> }
+        </td>
+     </tr> 
+  <% } %>
+</table>
