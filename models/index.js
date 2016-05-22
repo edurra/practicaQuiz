@@ -17,5 +17,11 @@ if (!process.env.DATABASE_URL) {
 var sequelize = new Sequelize(url, {storage: storage, omitNull: true});
 
 var Quiz = sequelize.import(path.join(__dirname,'quiz'));
+var Comment = sequelize.import(path.join(__dirname,'comment'));
+
+Comment.belongsTo(Quiz);
+Quiz.hasMany(Comment);
 
 exports.Quiz = Quiz;
+
+exports.Comment=Comment;

@@ -74,7 +74,7 @@ exports.search = function(req, res, next) {
 };
 
 exports.load = function(req, res, next, quizId) {
-	models.Quiz.findById(quizId)
+	models.Quiz.findById(quizId, { include: [ models.Comment ] })
   		.then(function(quiz) {
       		if (quiz) {
         		req.quiz = quiz;
