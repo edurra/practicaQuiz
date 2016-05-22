@@ -22,6 +22,8 @@ var User = sequelize.import(path.join(__dirname,'user'));
 Comment.belongsTo(Quiz);
 Quiz.hasMany(Comment);
 
+
+
 exports.Quiz = Quiz;
 
 exports.Comment = Comment;
