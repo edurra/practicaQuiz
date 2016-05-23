@@ -1,26 +1,32 @@
 'use strict';
 
+var crypto = require('crypto');
+
+
+function encryptPassword(password, salt) {
+    return crypto.createHmac('sha1', salt).update(password).digest('hex');
+};
+
+
 module.exports = {
   up: function (queryInterface, Sequelize) {
-    /*
-      Add altering commands here.
-      Return a promise to correctly handle asynchronicity.
 
-      Example:
-      return queryInterface.bulkInsert('Person', [{
-        name: 'John Doe',
-        isBetaMember: false
-      }], {});
-    */
+      return queryInterface.bulkInsert('Users', [ 
+         { username: 'admin', 
+           password: encryptPassword('1234', 'aaaa'),
+           expiration: new Date(),
+           salt:     'aaaa',
+           isAdmin: true,
+           createdAt: new Date(), updatedAt: new Date() },
+         { username: 'pepe',  
+           password: encryptPassword('5678', 'bbbb'),
+	   expiracion: new Date(),
+           salt:     'bbbb',
+           createdAt: new Date(), updatedAt: new Date() }
+        ]);
   },
 
   down: function (queryInterface, Sequelize) {
-    /*
-      Add reverting commands here.
-      Return a promise to correctly handle asynchronicity.
-
-      Example:
-      return queryInterface.bulkDelete('Person', null, {});
-    */
+      return queryInterface.bulkDelete('Users', null, {});
   }
 };

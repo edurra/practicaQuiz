@@ -9,6 +9,7 @@ var partials = require('express-partials');
 var flash = require('express-flash');
 var methodOverride = require('method-override');
 
+
 var routes = require('./routes/index');
 
 
@@ -33,10 +34,34 @@ app.use(methodOverride('_method', {methods: ["POST", "GET"]}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 
+
+
+
 app.use(function(req, res, next){
   res.locals.session = req.session;
   next();
 });
+
+app.use(function(req, res, next){
+   if(req.session.user){
+
+         var date= new Date();
+         if(date<req.session.user.expiracion)
+            {
+            
+                         var expiracion = req.session.user.expiracion;
+                         req.session.user.expiracion = date.setMinutes(date.getMinutes()+2);
+                         
+                         next();
+                     }
+                     else{
+                        delete req.session.user;
+                        res.redirect("/session");
+                     };
+              }
+              else{next()};
+});
+
 
 app.use('/', routes);
 

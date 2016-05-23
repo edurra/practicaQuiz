@@ -18,6 +18,10 @@ module.exports = function(sequelize, DataTypes) {
                     this.setDataValue('password', encryptPassword(password, this.salt));
                 }
         },
+       expiracion: {
+            type: DataTypes.DATE
+            
+        },
         salt: {
             type: DataTypes.STRING
         },
