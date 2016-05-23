@@ -56,6 +56,7 @@ app.use(function(req, res, next){
                      }
                      else{
                         delete req.session.user;
+                        req.flash('error', "Desconectado por inactividad");
                         res.redirect("/session");
                      };
               }
