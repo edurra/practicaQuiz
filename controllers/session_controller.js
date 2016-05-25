@@ -44,7 +44,7 @@ exports.create = function(req, res, next) {
     	     
     	        req.session.user = {id:user.id, username:user.username, expiracion:user.expiracion};
                 var date = new Date();
-                date = date.setMinutes(date.getMinutes()+10);
+                date = date.setMinutes(date.getMinutes()+2);
                 req.session.user.expiracion= date;
                 res.redirect(redir); // redirección a redir
             } else {

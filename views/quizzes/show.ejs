@@ -16,6 +16,6 @@
 <p><strong>Comentarios:</strong></p>
 <ul>
 <% for (var i in quiz.Comments) { %>
-<li> <%=quiz.Comments[i].text %> </li>
+<li> <%=quiz.Comments[i].text %> <strong> Escrito por: </strong><%=quiz.Comments[i].AuthorId%> </li>
 <% } %>
 </ul>
